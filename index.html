@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #fdfbfb, #ebedee);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Message Styles */
+        .message {
+            position: absolute;
+            top: 10%;
+            text-align: center;
+            color: #333;
+        }
+
+        .message h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .message p {
+            font-size: 1.2rem;
+        }
+
+        /* Button Styles */
+        .button {
+            position: absolute;
+            bottom: 20%;
+            background-color: #ff69b4;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Heart Animation */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            transform: rotate(45deg);
+            animation: floatHearts 5s infinite ease-in;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: -10px;
+            top: 0;
+        }
+
+        @keyframes floatHearts {
+            0% {
+                transform: translateY(100vh) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            z-index: 2;
+            opacity: 0;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+
+        .popup.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .popup .tulip {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            background: linear-gradient(to top, white, pink);
+            border-radius: 0 0 100% 100%;
+            margin-bottom: 90px;
+        }
+
+        .popup .petal {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: pink;
+            border-radius: 0px 300px 0 0;
+            margin-top: -40px;
+        }
+
+        .popup .petal1 {
+            position: absolute;
+            width: 45px;
+            height: 40px;
+            left: 30%;
+            background: pink;
+            border-radius: 20px 20px 0 0;
+            margin-top: -40px;
+        }
+
+        .popup .petal2 {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 60%;
+            background: pink;
+            border-radius: 300px 0px 0 0;
+            margin-top: -40px;
+        }
+
+        .popup .stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 10px;
+            height: 100px;
+            background: green;
+            transform: translateX(-50%);
+        }
+
+        .popup .leaf {
+            position: absolute;
+            bottom: 20%;
+            width: 50px;
+            height: 20px;
+            background: green;
+            border-radius: 50%;
+        }
+
+        .popup .leaf.left {
+            left: -20px;
+            transform: rotate(30deg);
+        }
+
+        .popup .leaf.right {
+            right: -20px;
+            transform: rotate(-30deg);
+        }
+
+        /* Card Styles */
+        .card {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px;
+            width: 300px;
+            z-index: 3;
+            opacity: 0;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+
+        .card.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #ff69b4;
+        }
+
+        .card p {
+            font-size: 0.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <h1>Halo, Sayang! </h1>
+        <p>There's a little gift i've prepared just for you ❤️</p>
+    </div>
+    <button class="button" onclick="showSurprise()">Press Me!</button>
+    <div class="hearts" id="hearts"></div>
+    <div class="popup" id="popup">
+        <div class="tulip">
+            <div class="petal petal"></div>
+            <div class="petal petal1"></div>
+            <div class="petal petal2"></div>
+        </div>
+        <div class="stem"></div>
+        <div class="leaf left"></div>
+        <div class="leaf right"></div>
+    </div>
+    <div class="card" id="card">
+        <h2>Selamat Ulang Tahun Sayangku, Cintaku, Cantiku 🎉</h2>
+        <p>Halo, cantik. Selamat ulang tahun ya untuk cewek kesayangan aku, the one and only yang selalu gemas tingkahnya dan cantik banget kyk apotek tutup. Anyway selamat bertambah usia sayangku, it's your 20th yeayy. Kamu udah menginjak kepala dua btw dan aku harap semoga apa yang kamu inginkan di tahun dan diumur kamu yang sekarang ke 20 tahun ini cepat terkabul, pasti banyak banget tantangan dan rintangannya tapi aku yakin kamu pasti bisa lewatin itu semua. Aku harap untuk kesehatan kamu, jiwa dan raga kamu. Aku harap banyak hal baik yang terjadi untuk kamu biar kamu sedikit nangis-nangisnya!! Aku selalu disini kok untuk nemenin langkah kamu, in you 21st, 22nd and soo on! I love you with all my heart, aku cinta kamu setinggi langit yang tidak ada ujungnya, seluas itu sayang. Let's create more memories untuk kedepannya ya cantik! Sekali lagi, selamat ulang tahun sayang 🤍 </p>
+    </div>
+    <script>
+        function createHeart() {
+            const hearts = document.getElementById('hearts');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            hearts.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        function showSurprise() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 50);
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                popup.style.display = 'none';
+                showCard();
+            }, 3000);
+        }
+
+        function showCard() {
+            const card = document.getElementById('card');
+            card.style.display = 'block';
+            setTimeout(() => {
+                card.classList.add('show');
+            }, 50);
+        }
+
+        setInterval(createHeart, 500);
+    </script>
+</body>
+</html>
